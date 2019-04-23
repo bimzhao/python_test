@@ -79,3 +79,27 @@ ax.plot(valid['Date'], valid[['Close', 'Predictions']]) #same above
 ax.set_xlim(datetime.date(2013,6,1), datetime.date(2018,12,1))
 
 plt.show()
+
+#setting index as date values
+df['Date'] = pd.to_datetime(df.Date,format='%Y-%m-%d')
+df.index = df['Date']
+
+#sorting
+data = df.sort_index(ascending=True, axis=0)
+
+#creating a separate dataset
+new_data = pd.DataFrame(index=range(0,len(df)),columns=['Date', 'Close'])
+
+for i in range(0,len(data)):
+    new_data['Date'][i] = data['Date'][i]
+    new_data['Close'][i] = data['Close'][i]
+
+#create features
+from fastai.structured import  add_datepart
+add_datepart(new_data, 'Date')
+new_data.drop('Elapsed', axis=1, inplace=True)  #elapsed will be the time stamp
+
+
+
+
+
